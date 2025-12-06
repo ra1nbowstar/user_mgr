@@ -1,16 +1,21 @@
+from config import Wechat_ID
 import requests
 import hashlib
 import jwt
 import datetime
 from fastapi import Request, HTTPException
-
-# 微信小程序配置
-WECHAT_APP_ID = "your_appid"
-WECHAT_APP_SECRET = "your_appsecret"
-
 from src.config import get_conn
 
+# 微信小程序配置从环境变量读取，避免明文写入仓库
+WECHAT_APP_ID = Wechat_ID.get("wechat_app_id", "")
+WECHAT_APP_SECRET = Wechat_ID.get("wechat_app_secret", "")
+
+
+
 async def wechat_login(request: Request):
+    if not WECHAT_APP_ID or not WECHAT_APP_SECRET:
+        raise HTTPException(status_code=500, detail="未配置微信小程序 AppId/Secret，请在 .env 中设置 WECHAT_APP_ID 与 WECHAT_APP_SECRET")
+
     data = await request.json()
     code = data.get('code')
     user_info = data.get('userInfo')
