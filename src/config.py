@@ -1,6 +1,3 @@
-from pathlib import Path
-import sys
-
 import os
 import pymysql
 from dotenv import load_dotenv
@@ -16,8 +13,12 @@ CFG = {
     "db": os.getenv("MYSQL_DATABASE", "userdb"),
     "charset": "utf8mb4",
     "autocommit": True,
-}
 
+}
+Wechat_ID = {
+        "wechat_app_id": os.getenv("WECHAT_APP_ID", ""),
+        "wechat_app_secret": os.getenv("WECHAT_APP_SECRET", ""),
+}
 def get_conn():
     return pymysql.connect(**CFG, cursorclass=pymysql.cursors.DictCursor)
 
